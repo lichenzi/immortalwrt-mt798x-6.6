@@ -42,7 +42,8 @@ jobs:
           if [ $found -eq 0 ]; then
             echo "未找到默认IP，创建自定义配置..."
             mkdir -p files/etc/config/
-            cat > files/etc/config/network <<'EOF'
+            # 修复Here文档语法：确保EOF单独成行且无缩进
+            cat > files/etc/config/network <<EOF
 config interface 'lan'
     option type 'bridge'
     option ifname 'eth0.1'
@@ -64,8 +65,7 @@ EOF
           make defconfig
 
       - name: 开始编译
-        run: |
-          make -j$(nproc) V=s
+        run: make -j$(nproc) V=s
 
       - name: 上传固件
         uses: actions/upload-artifact@v4
