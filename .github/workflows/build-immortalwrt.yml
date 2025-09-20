@@ -46,14 +46,12 @@ jobs:
           if [ $found -eq 0 ]; then
             echo "未找到默认IP，创建自定义配置..."
             mkdir -p files/etc/config/
-            cat << 'EOF' > files/etc/config/network
-config interface 'lan'
-    option type 'bridge'
-    option ifname 'eth0.1'
-    option proto 'static'
-    option ipaddr '192.168.10.1'
-    option netmask '255.255.255.0'
-EOF
+            echo "config interface 'lan'" > files/etc/config/network
+            echo "    option type 'bridge'" >> files/etc/config/network
+            echo "    option ifname 'eth0.1'" >> files/etc/config/network
+            echo "    option proto 'static'" >> files/etc/config/network
+            echo "    option ipaddr '192.168.10.1'" >> files/etc/config/network
+            echo "    option netmask '255.255.255.0'" >> files/etc/config/network
           fi
 
       - name: 配置编译选项
@@ -74,6 +72,16 @@ EOF
         run: |
           cd immortalwrt
           make -j$(nproc) V=s
+
+      - name: 检查编译结果
+        run: |
+          cd immortalwrt
+          if ls bin/targets/mediatek/mt798x/*.bin 1> /dev/null 2>&1; then
+            echo "编译成功，找到固件文件"
+          else
+            echo "编译失败，未找到固件文件"
+            exit 1
+          fi
 
       - name: 上传固件
         uses: actions/upload-artifact@v4
