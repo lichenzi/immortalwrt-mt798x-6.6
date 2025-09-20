@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: 安装编译依赖
         run: |
@@ -48,7 +46,7 @@ jobs:
           if [ $found -eq 0 ]; then
             echo "未找到默认IP，创建自定义配置..."
             mkdir -p files/etc/config/
-            cat > files/etc/config/network << 'EOF'
+            cat << 'EOF' > files/etc/config/network
 config interface 'lan'
     option type 'bridge'
     option ifname 'eth0.1'
@@ -66,8 +64,6 @@ EOF
           
           # 使用defconfig而不是手动设置
           make defconfig
-          # 或者使用现有配置文件
-          # cp configs/targets/mediatek-mt7986-cudy-ax3000.config .config
           
           # 确保选择了正确的设备
           echo "CONFIG_TARGET_mediatek_mt798x=y" >> .config
