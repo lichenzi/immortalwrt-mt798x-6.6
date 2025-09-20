@@ -28,7 +28,7 @@ jobs:
             "package/base-files/files/bin/config_generate"
             "package/base-files/files/etc/config/network"
             "target/linux/mediatek/files-5.4/etc/config/network"
-            "target/linux/mediatek/files-6.6/etc/config/network"  # 适配6.6内核版本
+            "target/linux/mediatek/files-6.6/etc/config/network"
           )
           
           # 查找包含原始IP（192.168.6.1）的配置文件并替换
@@ -57,10 +57,10 @@ jobs:
             echo "未找到192.168.6.1的配置，尝试强制设置LAN口IP..."
             # 创建自定义网络配置文件（优先级高于默认配置）
             mkdir -p files/etc/config/
-            cat > files/etc/config/network <<EOF
+            cat > files/etc/config/network <<'EOF'
 config interface 'lan'
     option type 'bridge'
-    option ifname 'eth0.1'  # 适配MT798x常见LAN口接口名
+    option ifname 'eth0.1'
     option proto 'static'
     option ipaddr '192.168.10.1'
     option netmask '255.255.255.0'
